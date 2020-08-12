@@ -1,0 +1,3 @@
+include ':curtain'
+include ':app'
+rootProject.name = "CurtainView"
