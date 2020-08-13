@@ -7,6 +7,10 @@ package com.supcoder.curtain
 interface ICurtainView {
 
 
+    /**
+     * 设置是否镜像
+     */
+    fun setIsMirror(isMirror: Boolean)
 
     /**
      * 设置动画执行的时长

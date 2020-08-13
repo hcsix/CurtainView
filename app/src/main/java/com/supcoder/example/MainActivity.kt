@@ -1,11 +1,9 @@
 package com.supcoder.example
 
-import android.animation.ValueAnimator
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.appcompat.app.AppCompatActivity
 import com.supcoder.curtain.CurtainView
 import kotlinx.android.synthetic.main.activity_main.*
 
