@@ -1,5 +1,7 @@
 package com.supcoder.curtain
 
+import android.graphics.BlurMaskFilter
+
 /**
  * @author lihc15
  * @date 2020/8/12
@@ -15,14 +17,15 @@ object DefaultVal {
     /**
      * 窗帘页数量
      */
-    const val SHEET_NUM = 4
+    const val SHEET_NUM = 6
 
 
     /**
      * 窗帘完全折叠状态宽度占控件比率
      * */
-    const val MIN_FOLD_WIDTH_RATE = 0.15f
+    const val MIN_FOLD_WIDTH_RATE = 0.2f
 
-    const val MAX_ARC_HEIGHT = 20f
+    const val MAX_ARC_HEIGHT = 5f
+
 
 }

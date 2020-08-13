@@ -2,10 +2,7 @@ package com.supcoder.curtain
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -74,7 +71,8 @@ class CurtainView : View, ICurtainView {
     }
 
 
-    private var paint: Paint = Paint()
+    private var sheetPaint = Paint()
+    private var borderPaint = Paint()
 
 
     override fun setIsMirror(isMirror: Boolean) {
@@ -113,15 +111,32 @@ class CurtainView : View, ICurtainView {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        if (isMirror) {
+            canvas.scale(-1f, 1f, width / 2f, height / 2f)
+        }
+
+        sheetPaint.apply {
+            isAntiAlias = true
+            color = Color.WHITE
+            alpha = (255 * 0.6).toInt()
+            style = Paint.Style.FILL
+        }
+
+        borderPaint.apply {
+            isAntiAlias = true
+            strokeWidth = 1f
+            color = Color.GRAY
+            alpha = (255 * 0.2).toInt()
+            style = Paint.Style.STROKE
+        }
+
         drawCurtainSheets(canvas)
     }
 
     private fun drawCurtainSheets(canvas: Canvas) {
-        paint.isAntiAlias = true
-        paint.strokeWidth = 1f
 
         val width = width
-        val height = height
+        val height = height - 2
 
         val offsetProgress =
             DefaultVal.MIN_FOLD_WIDTH_RATE * 100 + curProgress * (1 - DefaultVal.MIN_FOLD_WIDTH_RATE)
@@ -142,20 +157,14 @@ class CurtainView : View, ICurtainView {
             path.moveTo((i + 1) * sheetWith, arcPointY)
             path.quadTo(
                 (i + 0.5f) * sheetWith,
-                height - (height * 0.01f).coerceAtLeast(5f),
+                height - (height * 0.01f).coerceAtLeast(4f),
                 i * sheetWith,
                 height.toFloat()
             )
 
-            paint.color = Color.WHITE
-            paint.alpha = (255 * 0.8).toInt()
-            paint.style = Paint.Style.FILL
-            canvas.drawPath(path, paint)
+            canvas.drawPath(path, sheetPaint)
 
-            paint.color = Color.BLACK
-            paint.alpha = (255 * 0.1).toInt()
-            paint.style = Paint.Style.STROKE
-            canvas.drawPath(path, paint)
+            canvas.drawPath(path, borderPaint)
         }
 
     }
