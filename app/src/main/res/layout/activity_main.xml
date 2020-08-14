@@ -33,6 +33,7 @@
 
         <com.supcoder.curtain.CurtainView
             android:id="@+id/curtainView2"
+            app:curtainType="right"
             android:layout_width="120dp"
             android:layout_height="200dp" />
 
@@ -45,6 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="80dp"
+        app:curtainType="both"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="240dp"
         android:layout_height="200dp" />

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <attr name="curtainType">
+        <enum name="left" value="0" />
+        <enum name="right" value="1" />
+        <enum name="both" value="2" />
+    </attr>
+
+    <declare-styleable name="CurtainView">
+        <attr name="curtainType" />
+        <attr name="animDuration" format="integer" min="0"  />
+    </declare-styleable>
+
+
+</resources>

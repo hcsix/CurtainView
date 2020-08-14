@@ -21,7 +21,17 @@ enum class CurtainType {
     /**
      * 左右都有的窗帘
      */
-    BOTH,
+    BOTH;
 
+
+    companion object {
+        fun parse(value: Int): CurtainType {
+            return when (value) {
+                1 -> RIGHT
+                2 -> BOTH
+                else -> LEFT
+            }
+        }
+    }
 
 }

@@ -2,11 +2,16 @@ package com.supcoder.curtain
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import com.supcoder.curtain.bridge.ICurtainView
+import com.supcoder.curtain.bridge.OnProgressChangeListener
 import com.supcoder.curtain.config.CurtainType
 
 
@@ -19,25 +24,35 @@ class CurtainView : View, ICurtainView {
 
     val tag = "CurtainView"
 
-    constructor(context: Context?) : super(context) {
-    }
-
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-    }
-
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
-    ) {
-    }
-
-
     /**
      * 动画持续时长
      */
     private var animDuration = DefaultVal.ANIM_DURATION
+
+    /**
+     * 窗帘类型
+     */
+    private var type = CurtainType.LEFT
+
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
+
+        val attr = context.obtainStyledAttributes(attrs, R.styleable.CurtainView, defStyleAttr, 0)
+        val typeEnum = attr.getInt(R.styleable.CurtainView_curtainType, 0)
+
+        type = CurtainType.parse(typeEnum)
+
+        animDuration = attr.getInt(R.styleable.CurtainView_animDuration, DefaultVal.ANIM_DURATION)
+        attr.recycle()
+    }
+
 
     /**
      * 目标进度
@@ -49,16 +64,11 @@ class CurtainView : View, ICurtainView {
      */
     private var curProgress = 0
 
-    /**
-     * 是否镜像
-     */
-    private var type = CurtainType.LEFT
-
 
     /**
      *  进度变化监听
      */
-    var onProgressChangeListener: OnProgressChangeListener? = null
+    private var onProgressChangeListener: OnProgressChangeListener? = null
 
 
     private var animator: ValueAnimator? = null
@@ -76,13 +86,19 @@ class CurtainView : View, ICurtainView {
     private var borderPaint = Paint()
 
 
-    override fun setType( type: CurtainType) {
+    override fun setType(type: CurtainType): ICurtainView {
         this.type = type
+        return this
     }
 
-
-    override fun setAnimDuration(duration: Long) {
+    override fun setAnimDuration(duration: Int): ICurtainView {
         this.animDuration = duration
+        return this
+    }
+
+    override fun setOnProgressChangeListener(onProgressChangeListener: OnProgressChangeListener): ICurtainView {
+        this.onProgressChangeListener = onProgressChangeListener
+        return this
     }
 
 
@@ -97,7 +113,7 @@ class CurtainView : View, ICurtainView {
         }
         animator = ValueAnimator.ofInt(curProgress, targetProgress)
         animator?.let {
-            it.duration = animDuration
+            it.duration = animDuration.toLong()
             it.interpolator = DecelerateInterpolator()
             it.addUpdateListener(animatorListener)
         }
@@ -113,7 +129,6 @@ class CurtainView : View, ICurtainView {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-
         sheetPaint.apply {
             isAntiAlias = true
             color = Color.WHITE
@@ -128,7 +143,6 @@ class CurtainView : View, ICurtainView {
             alpha = (255 * 0.2).toInt()
             style = Paint.Style.STROKE
         }
-
 
         when (type) {
             CurtainType.LEFT -> {
@@ -223,6 +237,7 @@ class CurtainView : View, ICurtainView {
 
         val path = Path()
         for (i in 0 until DefaultVal.SHEET_NUM) {
+            //绘制左侧窗帘
             path.reset()
             path.moveTo(width - i * sheetWith, height.toFloat())
             path.lineTo(width - i * sheetWith, 0f)
@@ -237,9 +252,8 @@ class CurtainView : View, ICurtainView {
             )
             canvas.drawPath(path, sheetPaint)
             canvas.drawPath(path, borderPaint)
-        }
 
-        for (i in 0 until DefaultVal.SHEET_NUM) {
+            //绘制右侧窗帘
             path.reset()
             path.moveTo(i * sheetWith, height.toFloat())
             path.lineTo(i * sheetWith, 0f)
@@ -256,6 +270,7 @@ class CurtainView : View, ICurtainView {
             canvas.drawPath(path, borderPaint)
         }
 
+
     }
 
 
@@ -267,11 +282,6 @@ class CurtainView : View, ICurtainView {
                 it.cancel()
             }
         }
-    }
-
-
-    interface OnProgressChangeListener {
-        fun onProgressChanged(progress: Int)
     }
 
 

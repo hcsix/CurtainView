@@ -8,7 +8,7 @@ package com.supcoder.curtain
 object DefaultVal {
 
 
-    const val ANIM_DURATION = 1000L
+    const val ANIM_DURATION = 1000
 
 
     const val DEFAULT_PROGRESS = 0
@@ -23,6 +23,7 @@ object DefaultVal {
      * 窗帘完全折叠状态宽度占控件比率
      * */
     const val MIN_FOLD_WIDTH_RATE = 0.2f
+
 
     const val MAX_ARC_HEIGHT = 5f
 
