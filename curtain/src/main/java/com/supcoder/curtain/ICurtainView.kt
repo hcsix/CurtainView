@@ -1,5 +1,7 @@
 package com.supcoder.curtain
 
+import com.supcoder.curtain.config.CurtainType
+
 /**
  * @author lihc15
  * @date 2020/8/12
@@ -8,9 +10,9 @@ interface ICurtainView {
 
 
     /**
-     * 设置是否镜像
+     * 设置窗帘类型
      */
-    fun setIsMirror(isMirror: Boolean)
+    fun setType(@CurtainType.TypeDef type: Int )
 
     /**
      * 设置动画执行的时长

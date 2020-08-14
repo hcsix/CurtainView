@@ -38,6 +38,17 @@
 
     </LinearLayout>
 
+
+
+    <com.supcoder.curtain.CurtainView
+        android:id="@+id/curtainView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="240dp"
+        android:layout_height="200dp" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,6 +1,5 @@
 package com.supcoder.curtain
 
-import android.graphics.BlurMaskFilter
 
 /**
  * @author lihc15
@@ -26,6 +25,9 @@ object DefaultVal {
     const val MIN_FOLD_WIDTH_RATE = 0.2f
 
     const val MAX_ARC_HEIGHT = 5f
+
+
+    const val SHEET_BORDER_WIDTH = 1f
 
 
 }

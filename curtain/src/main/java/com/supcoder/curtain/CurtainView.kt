@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import com.supcoder.curtain.config.CurtainType
 
 
 /**
@@ -51,7 +52,7 @@ class CurtainView : View, ICurtainView {
     /**
      * 是否镜像
      */
-    private var isMirror = false
+    private var type = CurtainType.RIGHT
 
 
     /**
@@ -75,8 +76,8 @@ class CurtainView : View, ICurtainView {
     private var borderPaint = Paint()
 
 
-    override fun setIsMirror(isMirror: Boolean) {
-        this.isMirror = isMirror
+    override fun setType(@CurtainType.TypeDef type: Int) {
+        this.type = type
     }
 
 
@@ -111,9 +112,7 @@ class CurtainView : View, ICurtainView {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (isMirror) {
-            canvas.scale(-1f, 1f, width / 2f, height / 2f)
-        }
+
 
         sheetPaint.apply {
             isAntiAlias = true
@@ -124,16 +123,38 @@ class CurtainView : View, ICurtainView {
 
         borderPaint.apply {
             isAntiAlias = true
-            strokeWidth = 1f
+            strokeWidth = DefaultVal.SHEET_BORDER_WIDTH
             color = Color.GRAY
             alpha = (255 * 0.2).toInt()
             style = Paint.Style.STROKE
         }
 
-        drawCurtainSheets(canvas)
+
+        when (type) {
+            CurtainType.LEFT -> {
+                drawSingleCurtain(canvas, true)
+            }
+            CurtainType.RIGHT -> {
+                drawSingleCurtain(canvas, false)
+            }
+            CurtainType.BOTH -> {
+                drawBothCurtain(canvas)
+            }
+        }
+
     }
 
-    private fun drawCurtainSheets(canvas: Canvas) {
+
+    /**
+     * 绘制单侧窗帘
+     * @param canvas 画布
+     * @param isLeft 是否是左侧画布
+     */
+    private fun drawSingleCurtain(canvas: Canvas, isLeft: Boolean) {
+        //如果是左侧窗帘则镜像翻转canvas
+        if (isLeft) {
+            canvas.scale(-1f, 1f, width / 2f, height / 2f)
+        }
 
         val width = width
         val height = height - 2
@@ -141,7 +162,7 @@ class CurtainView : View, ICurtainView {
         val offsetProgress =
             DefaultVal.MIN_FOLD_WIDTH_RATE * 100 + curProgress * (1 - DefaultVal.MIN_FOLD_WIDTH_RATE)
 
-        val curtainAllSheetWidth = offsetProgress * width / 100f - 1f
+        val curtainAllSheetWidth = offsetProgress * width / 100f - DefaultVal.SHEET_BORDER_WIDTH
 
         val sheetWith = curtainAllSheetWidth / DefaultVal.SHEET_NUM
 
@@ -161,17 +182,97 @@ class CurtainView : View, ICurtainView {
                 i * sheetWith,
                 height.toFloat()
             )
-
             canvas.drawPath(path, sheetPaint)
+            canvas.drawPath(path, borderPaint)
+        }
 
+
+        for (i in 0 until DefaultVal.SHEET_NUM) {
+            path.reset()
+            path.moveTo(i * sheetWith, height.toFloat())
+            path.lineTo(i * sheetWith, 0f)
+            path.lineTo((i + 1) * sheetWith, 0f)
+            path.lineTo((i + 1) * sheetWith, arcPointY)
+            path.moveTo((i + 1) * sheetWith, arcPointY)
+            path.quadTo(
+                (i + 0.5f) * sheetWith,
+                height - (height * 0.01f).coerceAtLeast(4f),
+                i * sheetWith,
+                height.toFloat()
+            )
+            canvas.drawPath(path, sheetPaint)
+            canvas.drawPath(path, borderPaint)
+        }
+    }
+
+    /**
+     * 绘制双叶窗帘
+     */
+    private fun drawBothCurtain(canvas: Canvas) {
+        val width = width
+        val height = height - 2
+
+        val offsetProgress =
+            DefaultVal.MIN_FOLD_WIDTH_RATE * 100 + curProgress * (1 - DefaultVal.MIN_FOLD_WIDTH_RATE)
+
+        val curtainAllSheetWidth = offsetProgress * width / 100f - DefaultVal.SHEET_BORDER_WIDTH * 2
+
+        val sheetWith = curtainAllSheetWidth / (DefaultVal.SHEET_NUM * 2)
+
+        val arcPointY = height - DefaultVal.MAX_ARC_HEIGHT.coerceAtMost(height * 0.1f)
+
+        val path = Path()
+        for (i in 0 until DefaultVal.SHEET_NUM) {
+            path.reset()
+            path.moveTo(width - i * sheetWith, height.toFloat())
+            path.lineTo(width - i * sheetWith, 0f)
+            path.lineTo(width - (i + 1) * sheetWith, 0f)
+            path.lineTo(width - (i + 1) * sheetWith, arcPointY)
+            path.moveTo(width - (i + 1) * sheetWith, arcPointY)
+            path.quadTo(
+                width - (i + 0.5f) * sheetWith,
+                height - (height * 0.01f).coerceAtLeast(4f),
+                width - i * sheetWith,
+                height.toFloat()
+            )
+            canvas.drawPath(path, sheetPaint)
+            canvas.drawPath(path, borderPaint)
+        }
+
+        for (i in 0 until DefaultVal.SHEET_NUM) {
+            path.reset()
+            path.moveTo(i * sheetWith, height.toFloat())
+            path.lineTo(i * sheetWith, 0f)
+            path.lineTo((i + 1) * sheetWith, 0f)
+            path.lineTo((i + 1) * sheetWith, arcPointY)
+            path.moveTo((i + 1) * sheetWith, arcPointY)
+            path.quadTo(
+                (i + 0.5f) * sheetWith,
+                height - (height * 0.01f).coerceAtLeast(4f),
+                i * sheetWith,
+                height.toFloat()
+            )
+            canvas.drawPath(path, sheetPaint)
             canvas.drawPath(path, borderPaint)
         }
 
     }
 
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.let {
+            it.removeAllUpdateListeners()
+            if (it.isRunning) {
+                it.cancel()
+            }
+        }
+    }
+
+
     interface OnProgressChangeListener {
         fun onProgressChanged(progress: Int)
     }
+
 
 }
