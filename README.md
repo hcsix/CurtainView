@@ -1,5 +1,7 @@
 # CurtainView Android自定义窗帘布局
 
+![窗帘图](https://github.com/HC-lee/CurtainView/blob/master/picture/curtain.gif)
+
 特性
 ===
 
