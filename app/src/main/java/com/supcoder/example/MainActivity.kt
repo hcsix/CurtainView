@@ -14,6 +14,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        seekBar1.progress = 100
+        seekBar.progress = 0
+
         seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 val seekBarProgress = 100 - p1
@@ -28,8 +32,6 @@ class MainActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(p0: SeekBar) {
                 curtainView.setProgress(p0.progress)
-                curtainView2.setProgress(p0.progress)
-                curtainView3.setProgress(p0.progress)
             }
         })
         seekBar1.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
@@ -47,8 +49,6 @@ class MainActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(p0: SeekBar) {
                 val curProgress = 100 - p0.progress
                 curtainView.setProgress(curProgress)
-                curtainView2.setProgress(curProgress)
-                curtainView3.setProgress(curProgress)
             }
         })
     }
