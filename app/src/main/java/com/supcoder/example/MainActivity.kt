@@ -14,16 +14,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        curtainView.setOnProgressChangeListener(
-            object : OnProgressChangeListener {
-                override fun onProgressChanged(progress: Int) {
-                    seekBar2.progress = progress
-                }
-            }
-        )
-
-
-
         seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 val seekBarProgress = 100 - p1
