@@ -176,7 +176,7 @@ class CurtainView : View, ICurtainView {
         val offsetProgress =
             DefaultVal.MIN_FOLD_WIDTH_RATE * 100 + curProgress * (1 - DefaultVal.MIN_FOLD_WIDTH_RATE)
 
-        val curtainAllSheetWidth = offsetProgress * width / 100f - DefaultVal.SHEET_BORDER_WIDTH
+        val curtainAllSheetWidth = offsetProgress * width / 100f
 
         val sheetWith = curtainAllSheetWidth / DefaultVal.SHEET_NUM
 
@@ -229,7 +229,7 @@ class CurtainView : View, ICurtainView {
         val offsetProgress =
             DefaultVal.MIN_FOLD_WIDTH_RATE * 100 + curProgress * (1 - DefaultVal.MIN_FOLD_WIDTH_RATE)
 
-        val curtainAllSheetWidth = offsetProgress * width / 100f - DefaultVal.SHEET_BORDER_WIDTH * 2
+        val curtainAllSheetWidth = offsetProgress * width / 100f
 
         val sheetWith = curtainAllSheetWidth / (DefaultVal.SHEET_NUM * 2)
 
