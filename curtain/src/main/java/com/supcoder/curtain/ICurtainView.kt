@@ -12,7 +12,7 @@ interface ICurtainView {
     /**
      * 设置窗帘类型
      */
-    fun setType(@CurtainType.TypeDef type: Int )
+    fun setType(type: CurtainType)
 
     /**
      * 设置动画执行的时长

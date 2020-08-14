@@ -52,7 +52,7 @@ class CurtainView : View, ICurtainView {
     /**
      * 是否镜像
      */
-    private var type = CurtainType.RIGHT
+    private var type = CurtainType.LEFT
 
 
     /**
@@ -76,7 +76,7 @@ class CurtainView : View, ICurtainView {
     private var borderPaint = Paint()
 
 
-    override fun setType(@CurtainType.TypeDef type: Int) {
+    override fun setType( type: CurtainType) {
         this.type = type
     }
 
@@ -152,7 +152,7 @@ class CurtainView : View, ICurtainView {
      */
     private fun drawSingleCurtain(canvas: Canvas, isLeft: Boolean) {
         //如果是左侧窗帘则镜像翻转canvas
-        if (isLeft) {
+        if (!isLeft) {
             canvas.scale(-1f, 1f, width / 2f, height / 2f)
         }
 

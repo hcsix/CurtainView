@@ -5,6 +5,7 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import com.supcoder.curtain.CurtainView
+import com.supcoder.curtain.config.CurtainType
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -13,9 +14,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        curtainView2.setType(1)
+        curtainView2.setType(CurtainType.RIGHT)
 
-        curtainView3.setType(2)
+        curtainView3.setType(CurtainType.BOTH)
 
         curtainView.onProgressChangeListener = object : CurtainView.OnProgressChangeListener {
             override fun onProgressChanged(progress: Int) {
