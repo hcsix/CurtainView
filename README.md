@@ -1,7 +1,6 @@
 # CurtainView Android自定义窗帘布局
 
 [ ![](https://img.shields.io/badge/platform-android-green.svg) ](http://developer.android.com/index.html) 
-
 [ ![Download](https://api.bintray.com/packages/supcoder/maven/curtain/images/download.svg)](https://bintray.com/supcoder/maven/curtain/_latestVersion)
 
 #### 效果图
