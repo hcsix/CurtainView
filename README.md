@@ -14,6 +14,9 @@
 
 2.支持设置进度动画执行的持续时间；
 
+3.支持窗帘颜色配置；
+
+4.支持窗帘进度变化监听，和动画结束监听；
 
 
 ### 集成
@@ -21,17 +24,17 @@
 第 1 步、在工程的 build.gradle 中添加：
 
 ```
-allprojects {
-	repositories {
-		...
-		jcenter()
-	}
-}
+ allprojects {
+	 repositories {
+		 ...
+		 jcenter()
+	 }
+ }
 ```
 第 2 步、在应用的  build.gradle 中添加：
 
 ```
-dependencies {
-	implementation 'com.supcoder:curtain:1.0.0'
-}
+ dependencies {
+	 implementation 'com.supcoder:curtain:1.0.1'
+ }
 ```
