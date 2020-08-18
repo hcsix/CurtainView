@@ -3,8 +3,10 @@ package com.supcoder.example
 import android.os.Bundle
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.supcoder.curtain.CurtainView
+import com.supcoder.curtain.bridge.OnAnimEndListener
 import com.supcoder.curtain.bridge.OnProgressChangeListener
 import com.supcoder.curtain.config.CurtainType
 import kotlinx.android.synthetic.main.activity_main.*
@@ -50,6 +52,13 @@ class MainActivity : AppCompatActivity() {
                 val curProgress = 100 - p0.progress
                 curtainView.setProgress(curProgress)
             }
+        })
+
+        curtainView.setOnAnimEndListener(object : OnAnimEndListener {
+            override fun onAnimEnd() {
+                Toast.makeText(this@MainActivity, "动画执行结束", Toast.LENGTH_SHORT).show()
+            }
+
         })
     }
 

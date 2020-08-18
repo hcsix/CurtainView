@@ -22,7 +22,24 @@ interface ICurtainView {
     /**
      * 设置进度变化监听
      */
-    fun setOnProgressChangeListener(onProgressChangeListener: OnProgressChangeListener) :ICurtainView
+    fun setOnProgressChangeListener(onProgressChangeListener: OnProgressChangeListener): ICurtainView
+
+    /**
+     * 动画结束监听
+     */
+    fun setOnAnimEndListener(onAnimEndListener: OnAnimEndListener): ICurtainView
+
+    /**
+     * 设置窗帘页的颜色
+     */
+    fun setSheetColor(color: Int, alpha: Int = 255): ICurtainView
+
+    /**
+     * 设置窗帘边的颜色
+     */
+    fun setBorderColor(color: Int, alpha: Int = 255): ICurtainView
+
+
 
     /******************************** 窗帘属性配置 END **************************************************************************/
 

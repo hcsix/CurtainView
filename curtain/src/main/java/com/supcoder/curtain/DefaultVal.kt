@@ -1,5 +1,7 @@
 package com.supcoder.curtain
 
+import android.graphics.Color
+
 
 /**
  * @author lihc15
@@ -29,6 +31,18 @@ object DefaultVal {
 
 
     const val SHEET_BORDER_WIDTH = 1f
+
+
+    const val SHEET_COLOR = Color.WHITE
+
+
+    const val SHEET_ALPHA = (255 * 0.6).toInt()
+
+
+    const val BORDER_COLOR = Color.GRAY
+
+
+    const val BORDER_ALPHA = (255 * 0.2).toInt()
 
 
 }
