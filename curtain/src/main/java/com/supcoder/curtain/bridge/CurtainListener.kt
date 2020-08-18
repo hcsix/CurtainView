@@ -10,3 +10,11 @@ interface OnProgressChangeListener {
     fun onProgressChanged(progress: Int)
 
 }
+
+/**
+ * 窗帘动画结束监听
+ */
+interface OnAnimEndListener {
+
+    fun onAnimEnd()
+}

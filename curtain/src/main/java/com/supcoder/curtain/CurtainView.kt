@@ -1,5 +1,7 @@
 package com.supcoder.curtain
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -11,6 +13,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import com.supcoder.curtain.bridge.ICurtainView
+import com.supcoder.curtain.bridge.OnAnimEndListener
 import com.supcoder.curtain.bridge.OnProgressChangeListener
 import com.supcoder.curtain.config.CurtainType
 
@@ -22,7 +25,6 @@ import com.supcoder.curtain.config.CurtainType
  */
 class CurtainView : View, ICurtainView {
 
-    val tag = "CurtainView"
 
     /**
      * 动画持续时长
@@ -33,6 +35,69 @@ class CurtainView : View, ICurtainView {
      * 窗帘类型
      */
     private var type = CurtainType.LEFT
+
+
+    /**
+     * 目标进度
+     */
+    private var targetProgress = DefaultVal.DEFAULT_PROGRESS
+
+    /**
+     * 当前进度
+     */
+    private var curProgress = 0
+
+
+    /**
+     *  进度变化监听
+     */
+    private var onProgressChangeListener: OnProgressChangeListener? = null
+
+    /**
+     * 动画结束监听
+     */
+    private var onAnimEndListener: OnAnimEndListener? = null
+
+
+    private var animator: ValueAnimator? = null
+
+    private val animUpdateListener = ValueAnimator.AnimatorUpdateListener { animation ->
+        val value = animation.animatedValue as Int
+        curProgress = value
+        invalidate()
+        onProgressChangeListener?.onProgressChanged(curProgress)
+    }
+
+    private val animStateListener = object : AnimatorListener {
+        override fun onAnimationRepeat(p0: Animator?) {
+        }
+
+        override fun onAnimationEnd(p0: Animator?) {
+            onAnimEndListener?.onAnimEnd()
+        }
+
+        override fun onAnimationCancel(p0: Animator?) {
+        }
+
+        override fun onAnimationStart(p0: Animator?) {
+        }
+
+    }
+
+
+    private var sheetPaint = Paint()
+
+    private var borderPaint = Paint()
+
+    private var sheetColor = DefaultVal.SHEET_COLOR
+
+    private var sheetAlpha = DefaultVal.SHEET_ALPHA
+
+
+    private var borderColor = DefaultVal.BORDER_COLOR
+
+    private var borderAlpha = DefaultVal.BORDER_ALPHA
+
 
     constructor(context: Context) : super(context)
 
@@ -54,36 +119,6 @@ class CurtainView : View, ICurtainView {
     }
 
 
-    /**
-     * 目标进度
-     */
-    private var targetProgress = DefaultVal.DEFAULT_PROGRESS
-
-    /**
-     * 当前进度
-     */
-    private var curProgress = 0
-
-
-    /**
-     *  进度变化监听
-     */
-    private var onProgressChangeListener: OnProgressChangeListener? = null
-
-
-    private var animator: ValueAnimator? = null
-
-    private val animatorListener = ValueAnimator.AnimatorUpdateListener { animation ->
-        val value = animation.animatedValue as Int
-        curProgress = value
-        invalidate()
-        onProgressChangeListener?.onProgressChanged(curProgress)
-        Log.e(tag, "onAnimationUpdate: $value")
-    }
-
-
-    private var sheetPaint = Paint()
-    private var borderPaint = Paint()
 
 
     override fun setType(type: CurtainType): ICurtainView {
@@ -101,12 +136,33 @@ class CurtainView : View, ICurtainView {
         return this
     }
 
+    override fun setOnAnimEndListener(onAnimEndListener: OnAnimEndListener): ICurtainView {
+        this.onAnimEndListener = onAnimEndListener
+        return this
+    }
+
+    override fun setSheetColor(color: Int, alpha: Int): ICurtainView {
+        this.sheetColor = color
+        this.sheetAlpha = alpha
+        invalidate()
+        return this
+    }
+
+    override fun setBorderColor(color: Int, alpha: Int): ICurtainView {
+        this.borderColor = color
+        this.borderAlpha = alpha
+        invalidate()
+        return this
+    }
+
+
+
 
     override fun setProgress(progress: Int) {
-        Log.e(tag, "progress -> $progress")
         targetProgress = progress
         animator?.let {
             it.removeAllUpdateListeners()
+            it.removeAllListeners()
             if (it.isRunning) {
                 it.cancel()
             }
@@ -115,7 +171,8 @@ class CurtainView : View, ICurtainView {
         animator?.let {
             it.duration = animDuration.toLong()
             it.interpolator = DecelerateInterpolator()
-            it.addUpdateListener(animatorListener)
+            it.addUpdateListener(animUpdateListener)
+            it.addListener(animStateListener)
         }
         animator?.start()
     }
@@ -131,16 +188,16 @@ class CurtainView : View, ICurtainView {
 
         sheetPaint.apply {
             isAntiAlias = true
-            color = Color.WHITE
-            alpha = (255 * 0.6).toInt()
+            color = sheetColor
+            alpha = sheetAlpha
             style = Paint.Style.FILL
         }
 
         borderPaint.apply {
             isAntiAlias = true
             strokeWidth = DefaultVal.SHEET_BORDER_WIDTH
-            color = Color.GRAY
-            alpha = (255 * 0.2).toInt()
+            color = borderColor
+            alpha = borderAlpha
             style = Paint.Style.STROKE
         }
 
