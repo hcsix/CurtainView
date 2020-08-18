@@ -179,6 +179,7 @@ class CurtainView : View, ICurtainView {
 
     override fun setProgressImmediately(progress: Int) {
         targetProgress = progress
+        curProgress = progress
         invalidate()
     }
 

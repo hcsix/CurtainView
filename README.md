@@ -35,6 +35,6 @@
 
 ```
  dependencies {
-	 implementation 'com.supcoder:curtain:1.0.1'
+	 implementation 'com.supcoder:curtain:1.0.2'
  }
 ```
